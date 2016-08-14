@@ -1,0 +1,1385 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>wc3270 Resources</title>
+ <link HREF="http://www.w3.org/StyleSheets/Core/Steely" TYPE="text/css" REL="stylesheet">
+ <style type="text/css">
+<!--
+.indented
+{
+    padding-left: 50pt;
+    padding-right: 50pt;
+}
+-->
+</style>
+</head>
+<body>
+<h1>wc3270 Resources</h1>
+ <i>Resources</i> are used to configure wc3270.  Resources are named items with
+ string, integer or Boolean values.
+ <p>
+ Resource definitions come from the following sources:
+ <ul>
+ <li>Default values are compiled into wc3270.</li>
+ <li>If a session file <b><i>foo</i>.wc3270</b> is specified on the command line,
+ its contents are applied.
+ These definitions override resource values defined by
+ compiled-in defaults.</li>
+ <li>Command-line options override all other resource definitions.  If more
+  than one command-line option sets a resource, the last one is used.</li>
+ </ul>
+ Many resources have their own command-line switches, which are listed below.
+ Those that do not can still be set from the command-line via the <b>-xrm</b>
+ command-line option.  For example <a href=#bsdTm>wc3270.bsdTm</a> can be set by the
+ following command-line option:
+ <pre>
+     -xrm 'wc3270.bsdTm: true'
+ </pre>
+ Note that <b>-xrm</b> is supported on all of the 3270 emulators, not just on
+ x3270.
+ <h2>Resource File Syntax</h2>
+ A resource file
+ (session file)
+ has the following syntax.
+ <ul>
+  <li>Each definition consists of:
+  <pre>
+    <b>wc3270.</b><i>resource-name</i><b>:</b> <i>value</i>
+  </pre></li>
+  <li>Comment lines begin with <b>!</b>.</li>
+  <li>Line continuation is indicated by a backshash (<b>\</b>) character at
+   the end of a line.</li>
+  <li>Multi-line resources, such as keymap definitions, are split with
+   newline characters, e.g.:
+  <pre>
+    <b>wc3270.keymap.foo: \
+      &lt;Key>a: String("bob") \n\
+      &lt;Key>b: String("fred") \n\
+      &lt;Key>c: String("joe")</b>
+  </pre></li>
+ </ul>
+<h2>Alphabetical Resource List</h2>
+<a name="asciiBoxDraw"></a>
+<b>Name:</b> wc3270.asciiBoxDraw<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, this causes box-drawing characters (the Unicode 2500 block) to
+    be drawn with ASCII-art characters (<b>+</b>, <b>-</b> and <b>|</b>).
+    This allows a readable representation of these characters on the screen
+    when using fonts that do not include them or have them with the wrong
+    width.
+</p>
+<a name="autoShortcut"></a>
+<b>Name:</b> wc3270.autoShortcut<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -S
+, +S
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will run in <i>auto-shortcut</i> mode.  In auto-shortcut
+    mode, wc3270 automatically creates a desktop shortcut (<b>.lnk</b> file)
+    in %TEMP% that is compatible with its session file, then starts it.  This
+    ensures that the console window's screen size, character set, font, etc.
+    will be correct.
+    <p class="indented">
+    Auto-shortcut mode requires the use of a session file; the session file
+    must have been created by the Session Wizard (release 3.3.9 or later) and
+    must not have been modified incorrectly.  All desktop shortcuts created
+    by the Session Wizard release 3.3.10 or later include setting autoShortcut
+    to true.
+    <p class="indented">
+    The <b>+S</b> command-line switch turns off auto-shortcut mode.  All
+    desktop shortcuts created by the Session Wizard release 3.3.10 or later
+    include this switch.
+    <p class="indented">
+    Auto-shortcut mode does not work on Windows 9x.
+</p>
+<a name="bellMode"></a>
+<b>Name:</b> wc3270.bellMode<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Controls how wc3270 responds to an ALARM WCC or BELL character.
+    The value of <b>beepFlash</b> causes both the Windows console to
+    beep and the wc3270 window to flash; this is the default behavior.
+    The values of <b>beep</b> and <b>flash</b> cause just the beep and just
+    the window flash respectively.  The value <b>none</b> causes ALARM WCCs
+    and BELL characters to be ignored.
+    <p class="indented">
+    If this resource is defined, it overrides <a href=#visualBell>wc3270.visualBell</a>.
+</p>
+<a name="bindLimit"></a>
+<b>Name:</b> wc3270.bindLimit<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will restrict its screen dimensions to those specified in
+    the BIND image sent by the host.
+    If false, it will not.
+</p>
+<a name="blankFill"></a>
+<b>Name:</b> wc3270.blankFill<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set blankFill
+, -clear blankFill
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, in 3270 mode wc3270 will automatically convert
+    trailing blanks in a field to NULLs in order to insert a character, and will
+    automatically convert leading NULLs to blanks so that input data is not
+    squeezed to the left.  This works around some of the quirkier behavior of
+    real 3270 terminals.
+</p>
+<a name="bsdTm"></a>
+<b>Name:</b> wc3270.bsdTm<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines wc3270's response to the TELNET DO TIMING MARK option.  When set
+    to false, wc3270 will respond to DO TIMING MARK with
+    WONT
+    TIMING MARK, which is consistent with most modern TELNET clients.  When
+    true, wc3270 will respond with WILL TIMING MARK, which is consistent
+    with the old BSD <i>telnet</i> command and with previous versions of
+    wc3270.  In either case, wc3270 will never respond to a DONT TIMING MARK option.
+</p>
+<a name="caDir"></a>
+<b>Name:</b> wc3270.caDir<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -cadir
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a directory containing CA (root) certificates, used to validate
+    a certificate presented by the host during SSL negotiation.
+    The default is the <b>certs</b> subdirectory of the wc3270 install directory.
+</p>
+<a name="caFile"></a>
+<b>Name:</b> wc3270.caFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -cafile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a PEM-format file containing CA (root) certificates, used to
+    validate a certificate presented by the host during SSL negotiation.
+</p>
+<a name="certFile"></a>
+<b>Name:</b> wc3270.certFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -certfile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of a certificate file, provided to the host if requested
+    during SSL negotiation.
+    The default file format is PEM; it can be overridden by <a href=#certFileType>wc3270.certFileType</a>.
+    The private key for the certificate is specified by <a href=#keyFile>wc3270.keyFile</a>.
+    If <a href=#chainFile>wc3270.chainFile</a> is specified, it overrides <a href=#certFile>wc3270.certFile</a>.
+</p>
+<a name="certFileType"></a>
+<b>Name:</b> wc3270.certFileType<br>
+<b>Type</b>: String<br>
+<b>Default</b>: pem<br>
+<b>Command Line</b>: -certfiletype
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the type of the certificate file specified by <a href=#certFile>wc3270.certFile</a>.
+    The value can be <b>pem</b> or <b>asn1</b>.
+</p>
+<a name="chainFile"></a>
+<b>Name:</b> wc3270.chainFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -chainfile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of a certificate chain file, provided to the host if
+    requested during SSL negotiation.
+    The file contains a PEM-format certificate, optionally followed by
+    any intermediate certificates used to sign it, and the CA (root)
+    certificate.
+    The private key for the certificate is specified by <a href=#keyFile>wc3270.keyFile</a>.
+    If <a href=#chainFile>wc3270.chainFile</a> is specified, it overrides <a href=#certFile>wc3270.certFile</a>.
+</p>
+<a name="charset"></a>
+<b>Name:</b> wc3270.charset<br>
+<b>Type</b>: String<br>
+<b>Default</b>: bracket<br>
+<b>Command Line</b>: -charset
+<br>
+<b>Description</b>:<br>
+<p class=indented>    This defines the host EBCDIC character set, that is, what glyph (image) is
+    displayed for each EBCDIC code sent by the host, and what EBCDIC code is
+    sent to the host for each character typed on the keyboard.
+    This is more correctly referred to as the <i>host code page</i>.
+    <p class="indented">
+    To display the character sets supported by wc3270, use the <b>-v</b>
+    command-line option.
+</p>
+<a name="color8"></a>
+<b>Name:</b> wc3270.color8<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, wc3270 will respond to a Query(Color) with a list of 8
+    supported colors.  If false, it will send a list
+    of 16 colors.  The 8-color setting is required for some hosts which
+    abort a session if 16 colors are reported.
+</p>
+<a name="composeMap"></a>
+<b>Name:</b> wc3270.composeMap<br>
+<b>Type</b>: String<br>
+<b>Default</b>: latin1<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of the map used to define the pairs of characters that
+    form composite characters with the <i>Compose</i> key.
+    The definition of compose map <i>foo</i> is the resource
+    <a href=#composeMap.foo>wc3270.composeMap.<i>foo</i></a>.
+</p>
+<a name="composeMap.foo"></a>
+<b>Name:</b> wc3270.composeMap.<i>foo</i><br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    An individual compose map definition.
+    Each line in the resource is of the form:
+<pre>
+         keysym1 + keysym2 = keysym3
+</pre>
+<p class=indented>
+    meaning "when the </i>Compose</i> key is pressed,
+    followed by keysym1 and keysym2 (in either order), interpret it as
+    keysym3."  The definitions are case-sensitive.
+</p>
+<a name="confDir"></a>
+<b>Name:</b> wc3270.confDir<br>
+<b>Type</b>: String<br>
+<b>Default</b>: .<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the wc3270 configuration directory, where wc3270 will search for the
+    <b>ibm_hosts</b> file by default.  (See <a href=#hostsFile>wc3270.hostsFile</a>.)
+    <p class=indented>
+    The default is to search the directory where wc3270 was started, which
+    usually its installation directory.
+</p>
+<a name="consoleColorForHostColor0"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor0<br>
+<a name="consoleColorForHostColorNeutralBlack"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorNeutralBlack<br>
+<a name="consoleColorForHostColor1"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor1<br>
+<a name="consoleColorForHostColorBlue"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorBlue<br>
+<a name="consoleColorForHostColor2"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor2<br>
+<a name="consoleColorForHostColorRed"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorRed<br>
+<a name="consoleColorForHostColor3"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor3<br>
+<a name="consoleColorForHostColorPink"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorPink<br>
+<a name="consoleColorForHostColor4"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor4<br>
+<a name="consoleColorForHostColorGreen"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorGreen<br>
+<a name="consoleColorForHostColor5"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor5<br>
+<a name="consoleColorForHostColorTurquoise"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorTurquoise<br>
+<a name="consoleColorForHostColor6"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor6<br>
+<a name="consoleColorForHostColorYellow"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorYellow<br>
+<a name="consoleColorForHostColor7"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor7<br>
+<a name="consoleColorForHostColorNeutralWhite"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorNeutralWhite<br>
+<a name="consoleColorForHostColor8"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor8<br>
+<a name="consoleColorForHostColorBlack"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorBlack<br>
+<a name="consoleColorForHostColor9"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor9<br>
+<a name="consoleColorForHostColorDeepBlue"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorDeepBlue<br>
+<a name="consoleColorForHostColor10"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor10<br>
+<a name="consoleColorForHostColorOrange"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorOrange<br>
+<a name="consoleColorForHostColor12"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor12<br>
+<a name="consoleColorForHostColorPurple"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorPurple<br>
+<a name="consoleColorForHostColor13"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor13<br>
+<a name="consoleColorForHostColorPaleGreen"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorPaleGreen<br>
+<a name="consoleColorForHostColor14"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor14<br>
+<a name="consoleColorForHostColorPaleTurquoise"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorPaleTurquoise<br>
+<a name="consoleColorForHostColor15"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor15<br>
+<a name="consoleColorForHostColorGrey"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorGrey<br>
+<a name="consoleColorForHostColor16"></a>
+<b>Name:</b> wc3270.consoleColorForHostColor16<br>
+<a name="consoleColorForHostColorWhite"></a>
+<b>Name:</b> wc3270.consoleColorForHostColorWhite<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines what console color to use to render a particular host color.
+    Host colors can be specified by name or number.  That is, to define the
+    console color to use when the host specifies <b>green</b>, which is host
+    color 4, either the resource <b>wc3270.consoleColorForHostColorGreen</b> or
+    the resource <b>wc3270.consoleColorForHostColor4</b> can be used.
+    <p class=indented>
+    The default definitions are as follows.
+    <table cols=3 width="75%">
+    <tr> <th>Host Color Index</th>
+         <th>Host Color Name</th>
+         <th>Default Console Color</th>
+    <tr> <td>0</td> <td>NeutralBlack</td> <td>0</td> </tr>
+    <tr> <td>1</td> <td>Blue</td> <td>9</td> </tr>
+    <tr> <td>2</td> <td>Red</td> <td>12</td> </tr>
+    <tr> <td>3</td> <td>Pink</td> <td>13</td> </tr>
+    <tr> <td>4</td> <td>Green</td> <td>10</td> </tr>
+    <tr> <td>5</td> <td>Turquoise</td> <td>11</td> </tr>
+    <tr> <td>6</td> <td>Yellow</td> <td>14</td> </tr>
+    <tr> <td>7</td> <td>NeutralWhite</td> <td>15</td> </tr>
+    <tr> <td>8</td> <td>Black</td> <td>0</td> </tr>
+    <tr> <td>9</td> <td>DeepBlue</td> <td>1</td> </tr>
+    <tr> <td>10</td> <td>Orange</td> <td>12</td> </tr>
+    <tr> <td>11</td> <td>Purple</td> <td>5</td> </tr>
+    <tr> <td>12</td> <td>PaleGreen</td> <td>2</td> </tr>
+    <tr> <td>13</td> <td>PaleTurquoise</td> <td>3</td> </tr>
+    <tr> <td>14</td> <td>Grey</td> <td>7</td> </tr>
+    <tr> <td>15</td> <td>White</td> <td>15</td> </tr>
+    </table>
+    <p class=indented>
+    Note that "neutral black" means black on a display device and white on
+    a printing device, and "neutral white" means white on a display device and
+    black on a printing device.
+    <p class=indented>
+    The value of the resource is a console color index (0 through 15).
+    Console colors are defined as follows:
+    <table cols=3 width="75%">
+    <tr> <th>Index</th> <th>Sample</th> </tr>
+    <tr> <td>0</td>
+         <td><span style="color: #000000; background-color: black">[<b>sample</b>]<span></td> </tr>
+    <tr> <td>1</td>
+         <td><span style="color: #000080; background-color: black">[<b>sample</b>]<span></li>
+    <tr> <td>2</td>
+         <td><span style="color: #008000; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>3</td>
+         <td><span style="color: #008080; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>4</td>
+         <td><span style="color: #800000; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>5</td>
+         <td><span style="color: #800080; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>6</td>
+         <td><span style="color: #808000; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>7</td>
+         <td><span style="color: #c0c0c0; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>8</td>
+         <td><span style="color: #808080; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>9</td>
+         <td><span style="color: #0080ff; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>10</td>
+         <td><span style="color: #00ff00; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>11</td>
+         <td><span style="color: #00ffff; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>12</td>
+         <td><span style="color: #ff0000; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>13</td>
+         <td><span style="color: #ff00ff; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>14</td>
+         <td><span style="color: #ffff00; background-color: black">[<b>sample</b>]<span></td>
+    <tr> <td>15</td>
+         <td><span style="color: #ffffff; background-color: black">[<b>sample</b>]<span></td>
+    </table>
+    <p class=indented>
+    The color samples above are the default values used by the wc3270 Session
+    Wizard when it creates a desktop shortcut.  The RGB values for any of the
+    console colors can be changed later using the Colors tab on the Properties
+    dialog of the shortcut.
+    <p class=indented>
+    In NVT mode, wc3270 maps the ANSI-standard colors 0 through
+    7 to host colors, and from host colors to console colors.
+    The mapping from ANSI colors to host colors cannot be changed, but the
+    mapping from host colors to console colors can be with
+    <b>wc3270.consoleColorForHostColor*</b> resources.
+    The mappings and defaults are as follows:
+    <table cols=3 width="75%">
+    <tr><th>NVT ANSI Color</th>
+        <th>Mapped Host Color (not configurable)</th>
+	<th>Default Console Color</th>
+    <tr> <td>0 (black)</td>     <td>0 (Black)</td> <td>0</td> </tr>
+    <tr> <td>1 (red)</td>       <td>2 (Red) </td> <td>12</td> </tr>
+    <tr> <td>2 (green)</td>     <td>4 (Green)</td> <td>10</td> </tr>
+    <tr> <td>3 (yellow)</td>    <td>6 (Yellow)</td> <td>14</td> </tr>
+    <tr> <td>4 (blue)</td>      <td>1 (Blue)</td> <td>9</td> </tr>
+    <tr> <td>5 (magenta)</td>   <td>3 (Pink)</td> <td>13</td> </tr>
+    <tr> <td>6 (turquoise)</td> <td>6 (Turquoise)</td> <td>14</td> </tr>
+    <tr> <td>7 (white)</td>     <td>7 (NeutralWhite)</td> <td>15</td> </tr>
+    </table>
+    <p class=indented>
+    For example, to change the display from white-on-black to black-on-white,
+    define the following resources:
+    <pre>
+     wc3270.consoleColorForHostColorNeutralBlack: 15
+     wc3270.consoleColorForHostColorNeutralWhite: 0
+    </pre>
+</p>
+<a name="cursorPos"></a>
+<b>Name:</b> wc3270.cursorPos<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Command Line</b>: -set cursorPos
+, -clear cursorPos
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes wc3270 to display the cursor location in the OIA
+    (the status line).
+</p>
+<a name="dbcsCgcsgid"></a>
+<b>Name:</b> wc3270.dbcsCgcsgid<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Overrides the compiled-in value of the CGCSGID for the current host
+    character set, which will be reported to the host in response to a
+    Query(Character Sets).  The value is an integer, which can be prefixed with
+    '0x' to be in hexadecimal.  The upper 16 bits are the GCSGID (character
+    set) and the lower 16 bits are the CPGID (code page).  This value
+    applies only to the double-byte (DBCS) character set.  Use
+    <a href=#sbcsCgcsgid>wc3270.sbcsCgcsgid</a> for the single-byte (SBCS) character set.
+</p>
+<a name="dftBufferSize"></a>
+<b>Name:</b> wc3270.dftBufferSize<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 4096<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the default buffer size for DFT IND$FILE file transfers.  This
+    value can be overridden in the File Transfer dialog and by a parameter to
+    the <b>Transfer</b> action.
+</p>
+<a name="devName"></a>
+<b>Name:</b> wc3270.devName<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -devname
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the device name (workstation ID) sent in response to a TELNET
+    NEW-ENVIRON sub-negotiation request, used by iSeries hosts (RFC 4777).
+</p>
+<a name="dsTrace"></a>
+<b>Name:</b> wc3270.dsTrace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -trace 
+, -set dsTrace
+, -clear dsTrace
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 writes a hexadecimal representation of all network
+    traffic (and its interpretation) into a file, which defaults to
+    <b>x3trc.<i>process-id</i>.txt</b> in the wc3270 Application Data directory.
+    It also pops up a window to watch the file as it
+    is created, with the pathname of the file as the window title.
+    The directory prefix is defined by <a href=#traceDir>wc3270.traceDir</a>.
+    If <a href=#traceFile>wc3270.traceFile</a> is defined, it gives the entire pathname
+    and <a href=#traceDir>wc3270.traceDir</a> is ignored.
+</p>
+<a name="eof"></a>
+<b>Name:</b> wc3270.eof<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^D<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class=indented>
+    When connected in line-at-a-time mode (when wc3270 gathers a line of input
+    before forwarding it to the host), entering this character at the
+    keyboard causes
+    the current line of
+    input to be forwarded to the host without a trailing CR/LF sequence.
+    <p class=indented>
+</p>
+<a name="erase"></a>
+<b>Name:</b> wc3270.erase<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^?<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class="indented">
+    When connected in line-at-a-time mode (wc3270 gathers a line of input
+    before forwarding it ot the host), entering this character at the keyboard
+    will cause wc3270 to discard the last character on the input line.
+    <p class="indented">
+    When connected in character-at-a-time mode (wc3270 sends each keystroke
+    to the host as it is entered), this is the character that will be sent
+    to the host by the <b>Erase</b> action.
+</p>
+<a name="eventTrace"></a>
+<b>Name:</b> wc3270.eventTrace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set eventTrace
+, -clear eventTrace
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 traces information about keyboard and mouse
+    events into a file.
+    The default file name is
+    <b>x3trc.<i>process-id</i>.txt</b> in the wc3270 Application Data directory.
+    It also pops up a
+    window to watch the file as it is created, with the pathname of the file
+    as the window title.
+    The directory prefix is defined by <a href=#traceDir>wc3270.traceDir</a>.
+    If <a href=#traceFile>wc3270.traceFile</a> is defined, it gives the entire pathname
+    and <a href=#traceDir>wc3270.traceDir</a> is ignored.
+</p>
+<a name="extended"></a>
+<b>Name:</b> wc3270.extended<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -extended
+<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#model>wc3270.model</a> syntax</i>
+    <p class="indented">
+    Indicates support for the 3270 Extended Data Stream.
+</p>
+<a name="hostColorForDefault"></a>
+<b>Name:</b> wc3270.hostColorForDefault<br>
+<a name="hostColorForIntensified"></a>
+<b>Name:</b> wc3270.hostColorForIntensified<br>
+<a name="hostColorForProtected"></a>
+<b>Name:</b> wc3270.hostColorForProtected<br>
+<a name="hostColorForProtectedIntensified"></a>
+<b>Name:</b> wc3270.hostColorForProtectedIntensified<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default color to use to render text with a particular
+    attribute, when the host does not specify a particular color.
+    <p class=indented>
+    The value of the resource is a host color name or color index.
+    See <a href=#consoleColorForHostColor0>wc3270.consoleColorForHostColor0</a> for the definitions of host colors.
+    <p class=indented>
+    The default values are:
+    <table cols=2 width="75%">
+    <tr> <th>wc3270 Resource</th>
+         <th>Default Host Color</th>
+    <tr> <td>hostColorForDefault</td> <td>Green</td> </tr>
+    <tr> <td>hostColorForIntensified</td> <td>Red</td> </tr>
+    <tr> <td>hostColorForProtected</td> <td>Blue</td> </tr>
+    <tr> <td>hostColorForProtectedIntensified</td> <td>NeutralWhite</td> </tr>
+    </table>
+</p>
+<a name="hostname"></a>
+<b>Name:</b> wc3270.hostname<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of the host to connect to.  The name can include the usual
+    options (prefixes to specify special connection options, LU names, and
+    port).  A hostname specified on the command line takes precedence over
+    <a href=#hostname>wc3270.hostname</a>.
+    <p class=indented>
+    The most common use of <a href=#hostname>wc3270.hostname</a> is in <i>session files</i>, where a
+    file is used to pass all of the options to establish a wc3270 session.
+</p>
+<a name="hostsFile"></a>
+<b>Name:</b> wc3270.hostsFile<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ibm_hosts<br>
+<b>Description</b>:<br>
+<p class=indented>    The pathname of a file containing hostname aliases.
+    The file can also be used to define a set of actions to perform when
+    connecting to a host.
+    <p class="indented">
+    The format of the file is explained on the <i>ibm_hosts</i> manual page.
+</p>
+<a name="icrnl"></a>
+<b>Name:</b> wc3270.icrnl<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    It controls whether input carriage returns are mapped to newlines.
+</p>
+<a name="idleCommand"></a>
+<b>Name:</b> wc3270.idleCommand<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    When <a href=#idleCommand>wc3270.idleCommand</a> is defined, it specifies a command to execute after a
+    period of keyboard inactivity (no AID keys pressed).
+    The <a href=#idleCommand>wc3270.idleCommand</a> can be an arbitrary sequence of wc3270 actions, but it
+    should include an action which generates an AID (<b>Enter</b>, <b>Clear</b>,
+    <b>PF</b> or <b>PA</b>).
+    <a href=#idleCommandEnabled>wc3270.idleCommandEnabled</a> must be true in order for the
+    <a href=#idleCommand>wc3270.idleCommand</a> to take effect. (This is so an idle command can be defined,
+    but needs to be enabled explicitly at some point after login.)
+    <a href=#idleTimeout>wc3270.idleTimeout</a> specifies the inactivity interval.
+</p>
+<a name="idleCommandEnabled"></a>
+<b>Name:</b> wc3270.idleCommandEnabled<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    Controls whether <a href=#idleCommand>wc3270.idleCommand</a> has effect as soon as a host session
+    is established.  (This is so an idle command can be defined, but needs to
+    be explicitly enabled at some point after login.)
+</p>
+<a name="idleTimeout"></a>
+<b>Name:</b> wc3270.idleTimeout<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ~7m<br>
+<b>Description</b>:<br>
+<p class=indented>    The timeout value for <a href=#idleCommand>wc3270.idleCommand</a>.
+    If the value ends in <b>h</b>, it specifies hours; if it ends in
+    <b>m</b> it specifies minutes; if it ends in <b>s</b> or does not have
+    an alphanumeric suffix, it specifies seconds.
+    <p class="indented">
+    If the value begins with a tilde <b>~</b>, the time will be randomly
+    varied +/-10% from the value specified.
+</p>
+<a name="inlcr"></a>
+<b>Name:</b> wc3270.inlcr<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    It controls whether input newlines are mapped to carriage returns.
+</p>
+<a name="intr"></a>
+<b>Name:</b> wc3270.intr<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^C<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When this character is typed on the keyboard, the TELNET IP
+    (Interrupt Process) sequence is sent to the host.
+</p>
+<a name="keyFile"></a>
+<b>Name:</b> wc3270.keyFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -keyfile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of a file containg the private key for the certificate
+    specified by <a href=#certFile>wc3270.certFile</a> or <a href=#chainFile>wc3270.chainFile</a>.  The default file type is PEM;
+    it can be overridden by <a href=#keyFileType>wc3270.keyFileType</a>.  If the private key is encrypted,
+    the password is specified by <a href=#keyPasswd>wc3270.keyPasswd</a>.
+</p>
+<a name="keyFileType"></a>
+<b>Name:</b> wc3270.keyFileType<br>
+<b>Type</b>: String<br>
+<b>Default</b>: pem<br>
+<b>Command Line</b>: -keyfileType
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the type of the private key file specified by <a href=#keyFile>wc3270.keyFile</a>.
+    The value can be <b>pem</b> or <b>asn1</b>.
+</p>
+<a name="keymap"></a>
+<b>Name:</b> wc3270.keymap<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -keymap
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the keyboard map to use.
+    It can be a single keymap name or a comma-separated list of keymaps,
+    which will be applied in order.
+    <p class=indented>
+    Each keymap can optionally be defined in three separate parts: a common
+    keymap, which is applied at all times, an NVT-mode keymap, which is
+    applied only in NVT mode, and a 3270-mode keymap, which is only applied
+    in 3270 mode.
+    The NVT-mode keymap has the same name as the common keymap, with the
+    suffix <b>.nvt</b> appended.
+    The 3270-mode keymap has the suffix <b>.3270</b> appended.
+    Thus specifying a <a href=#keymap>wc3270.keymap</a> value of <i>foo</i> implies the use of
+    three different keymaps (if found): <b>foo</b>, <b>foo.nvt</b> and
+    <b>foo.3270</b>.
+    <p class=indented>
+    <a href=#keymap>wc3270.keymap</a> is only the name; the actual keymap for name
+    <i>foo</i> can be defined either by the resource <a href=#keymap.foo>wc3270.keymap.<i>foo</i></a>, or
+    by a
+    <i>keymap file</i>.
+    Keymap files are located in the wc3270 Application
+    Data directory, and have the suffix <b>.wc3270km</b>.
+</p>
+<a name="keymap.foo"></a>
+<b>Name:</b> wc3270.keymap.<i>foo</i><br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    The definition of keymap <i>foo</i>.
+    Please refer to the <i>How To Create a Custom Keymap</i> document for a
+    full description of the syntax.
+</p>
+<a name="keyPasswd"></a>
+<b>Name:</b> wc3270.keyPasswd<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -keypasswd
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the password for the private key file specified by <a href=#keyFile>wc3270.keyFile</a>, if it
+    is encrypted.
+    The value can take one of two forms. <b>file</b>:<i>filename</i> specifies
+    that the password is in a file. <b>string</b>:<i>string</i> gives the
+    password value in the resource itself.
+</p>
+<a name="kill"></a>
+<b>Name:</b> wc3270.kill<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^U<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class=indented>
+    When connected in line-at-a-time mode (when wc3270 gathers a line of input
+    before forwarding it to the host), entering this character at the
+    keyboard causes
+    the current input line to be erased.
+    <p class=indented>
+    When connected in character-at-a-time mode (when wc3270 sends each
+    keystroke to the host), this is the ASCII character that is sent to
+    the host by the <b>DeleteField</b>
+    action.
+</p>
+<a name="lineWrap"></a>
+<b>Name:</b> wc3270.lineWrap<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Command Line</b>: -set lineWrap
+, -clear lineWrap
+<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode.
+    When true, wc3270 will automatically insert a 
+    CR/LF sequence when output reaches the end of a line.  When false,
+    output will pile up at the end of each line until the host sends a
+    CR/LF sequence.
+</p>
+<a name="loginMacro"></a>
+<b>Name:</b> wc3270.loginMacro<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a sequence of commands to run as soon as a host connection is
+    established.  Usually these would be commands used to navigate through
+    login screens, such <b>String</b>, <b>Tab</b> and <b>Enter</b>.
+    <p class=indented>
+    If a <a href=#hostsFile>wc3270.hostsFile</a> is in use and a matching entry is found, the login
+    macro from that entry will be used in preference to the <a href=#loginMacro>wc3270.loginMacro</a>.
+</p>
+<a name="lnext"></a>
+<b>Name:</b> wc3270.lnext<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^V<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class=indented>
+    When connected in line-at-a-time mode (when wc3270 gathers a line of input
+    before forwarding it to the host), entering this character at the
+    keyboard removes any special meaning from the next character entered.
+</p>
+<a name="localCp"></a>
+<b>Name:</b> wc3270.localCp<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Forces wc3270 to use the specified codepage in place of the system ANSI
+    codepage.  This codepage is used when interpreting keymap files and
+    when generating trace files.
+</p>
+<a name="m3279"></a>
+<b>Name:</b> wc3270.m3279<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -color
+<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#model>wc3270.model</a> syntax</i>
+    <p class=indented>
+    Indicates support for color (a 3279 terminal).
+</p>
+<a name="marginedPaste"></a>
+<b>Name:</b> wc3270.marginedPaste<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set marginedPaste
+, -clear marginedPaste
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will use the current cursor position as a
+    left margin for pasted data: no pasted data will be input into an area to
+    the left of the current cursor positon.
+</p>
+<a name="model"></a>
+<b>Name:</b> wc3270.model<br>
+<b>Type</b>: String<br>
+<b>Default</b>: 3279-4-E<br>
+<b>Command Line</b>: -model
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The terminal model that wc3270 is emulating.  The model is in three parts,
+    separated by dashes; each part is optional.
+    <ul>
+	<li>3278 or 3279<br>
+	    3278 specifies a monochrome (green) 3270 display.
+	     <br>
+	    3279 specifies a color 3270 display.
+	     </li>
+	<li>2, 3, 4 or 5</br>
+	    The model number, which determines the size of the screen.</br>
+	    Model 2 has 24 rows and 80 columns.</br>
+	    Model 3 has 32 rows and 80 columns.</br>
+	    Model 4 has 43 rows and 80 columns.</br>
+	    Model 5 has 27 rows and 132 columns.</br>
+	    The default is
+	     the largest model that will fit on the console or terminal
+	     emulator window where wc3270 is running.
+	     Displaying the OIA (status line) requires one more row than
+	     what is listed above.
+	     </li>
+	<li>E</br>
+	    An optional suffix which indicates support for the 3270 Extended
+	     Data Stream (color, extended attributes, Query Reply).  3279
+	     implies E.</li>
+	     </ul>
+</p>
+<a name="monoCase"></a>
+<b>Name:</b> wc3270.monoCase<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set monoCase
+, -clear monoCase
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes wc3270 to run in uppercase-only mode.
+</p>
+<a name="noPrompt"></a>
+<b>Name:</b> wc3270.noPrompt<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, the interactive <b>wc3270&gt;</b> prompt will be
+    disabled.  In particular, this means that when wc3270 is not connected to
+    a host, a keymap or an external script is the only way to start a new
+    host connection.
+</p>
+<a name="numericLock"></a>
+<b>Name:</b> wc3270.numericLock<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes wc3270 to lock the keyboard when non-numeric data
+    is entered into fields with the Numeric attribute.
+</p>
+<a name="onlcr"></a>
+<b>Name:</b> wc3270.onlcr<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    Used only in NVT line-at-a-time mode; similar to the <i>stty</i> parameter
+    of the same name.
+    It controls whether output newlines are mapped to CR/LF sequences.
+</p>
+<a name="oerrLock"></a>
+<b>Name:</b> wc3270.oerrLock<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, operator errors (typing into protected fields,
+    insert overflow, etc.) will cause the keyboard to lock with an error
+    message in the OIA (status line).  If false, these
+    errors will simply cause the terminal bell will ring, without any
+    keyboard lock or message.
+</p>
+<a name="once"></a>
+<b>Name:</b> wc3270.once<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -once
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will exit as soon as a host disconnects.
+    The default is <b>false</b> if no hostname is specified on the command
+    line or in a session file,
+    <b>true</b> otherwise.
+</p>
+<a name="oversize"></a>
+<b>Name:</b> wc3270.oversize<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -oversize
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Sets the screen dimensions to be larger than the default for the
+    chosen model.  Its value is a string in the format
+    <b><i>cols</i>x<i>rows</i></b>.
+    It can also be the string <b>auto</b>, which will cause wc3270 to use the
+    entire screen area of the
+    console window it is running in.
+    It is used only if the <a href=#model>wc3270.model</a> includes the "-E" (extended
+    data stream) suffix, and only if the specified dimensions are larger than
+    the model number defaults.  Also, only hosts that support the Query Reply
+    structured field will function properly with wc3270 in this mode.
+</p>
+<a name="port"></a>
+<b>Name:</b> wc3270.port<br>
+<b>Type</b>: String<br>
+<b>Default</b>: telnet<br>
+<b>Command Line</b>: -port
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the default TCP port for wc3270 to connect to.  This can be
+    either a symbolic name from /etc/services, or an integer.
+</p>
+<a name="proxy"></a>
+<b>Name:</b> wc3270.proxy<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -proxy
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a proxy server that wc3270 will use to connect to hosts.
+    The value is of the form
+    <b><i>type</i>:<i>server</i></b>[<b>:<i>port</i></b>],
+    where options for <i>type</i> are described on the wc3270 manual page.
+</p>
+<a name="printerLu"></a>
+<b>Name:</b> wc3270.printerLu<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -printerlu
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If a value is set, wc3270 will automatically start a
+    wpr3287
+    printer session
+    when a host connection is established.
+    If the value is "<b>.</b>", the
+    wpr3287
+    session will
+    be associated with the interactive terminal session (this requires that
+    the host supports TN3270E).  Otherwise, the value is taken as the LU
+    name to associate with the printer session.
+</p>
+<a name="printer.assocCommandLine"></a>
+<b>Name:</b> wc3270.printer.assocCommandLine<br>
+<b>Type</b>: String<br>
+<b>Default</b>: wpr3287.exe -assoc %L% -command %R% %P% %O% %I% %H%<br>
+<b>Description</b>:<br>
+<p class=indented>    The shell command to use to start a printer session, when associated with
+    the current TN3270E session LU (when <a href=#printerLU>wc3270.printerLU</a> is "<b>.</b>").
+    Within the string, the following substitutions
+    are made:
+    <ul>
+	<li><b>%H%</b> is replaced with the current host name</li>
+	<li><b>%I%</b> is replaced with an option to pass <a href=#printer.codepage>wc3270.printer.codepage</a></li>
+	<li><b>%L%</b> is replaced with the current session's LU</li>
+	<li><b>%O%</b> is replaced with the value of <a href=#printer.options>wc3270.printer.options</a></li>
+	<li><b>%P%</b> is replaced with the current session's proxy option (<a href=#proxy>wc3270.proxy</a>)</li>
+	<li><b>%R%</b> is replaced with an option to pass the current character set</li>
+    </ul>
+</p>
+<a name="printer.codepage"></a>
+<b>Name:</b> wc3270.printer.codepage<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    The codepage used by the printer associated with wpr3287 printer sessions.
+    The default is to use the system's ANSI codepage.
+</p>
+<a name="printer.luCommandLine"></a>
+<b>Name:</b> wc3270.printer.luCommandLine<br>
+<b>Type</b>: String<br>
+<b>Default</b>: wpr3287.exe %R% %P% %O% %I% %L%@%H%<br>
+<b>Description</b>:<br>
+<p class=indented>    The shell command to use to start a printer session, when associated with a
+    specific LU.  Within the string, the following substitutions are made:
+    <ul>
+	<li><b>%H%</b> is replaced with the current host name</li>
+	<li><b>%I%</b> is replaced with an option to pass <a href=#printer.codepage>wc3270.printer.codepage</a></li>
+	<li><b>%L%</b> is replaced with the LU value entered into the dialog box</li>
+	<li><b>%O%</b> is replaced with the value of <a href=#printer.options>wc3270.printer.options</a></li>
+	<li><b>%P%</b> is replaced with current session's proxy option (<a href=#proxy>wc3270.proxy</a>)</li>
+	<li><b>%R%</b> is replaced with an option to pass the current character set</li>
+    </ul>
+</p>
+<a name="printer.name"></a>
+<b>Name:</b> wc3270.printer.name<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the name of the printer used for wpr3287 sessions and by the
+    <b>PrintText</b> action.  The default is to use the system's default
+    printer.
+</p>
+<a name="printer.options"></a>
+<b>Name:</b> wc3270.printer.options<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines extra parameters to substutute for the <b>%O%</b> token in the
+    printer command line.
+</p>
+<a name="printTextFont"></a>
+<b>Name:</b> wc3270.printTextFont<br>
+<b>Type</b>: String<br>
+<b>Default</b>: Courier New<br>
+<b>Description</b>:<br>
+<p class=indented>    The font used by the <b>PrintText</b> action.
+</p>
+<a name="printTextSize"></a>
+<b>Name:</b> wc3270.printTextSize<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 8<br>
+<b>Description</b>:<br>
+<p class=indented>    The font size used by the <b>PrintText</b> action.
+</p>
+<a name="qrBgColor"></a>
+<b>Name:</b> wc3270.qrBgColor<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will report in the QueryReply(color) that it supports
+    background color; when false, it will not.  It is disabled by default
+    because certain versions of GDDM are confused by this report and will
+    crash.
+</p>
+<a name="quit"></a>
+<b>Name:</b> wc3270.quit<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^\<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When connected in line-at-a-time mode (when wc3270
+    gathers a line of input before forwarding it to the host),
+    entering this character at the keyboard causes the
+    TELNET BREAK sequence to be sent to the host.
+</p>
+<a name="reconnect"></a>
+<b>Name:</b> wc3270.reconnect<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will automatically reconnect to a host after it disconnects.
+</p>
+<a name="rprnt"></a>
+<b>Name:</b> wc3270.rprnt<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^R<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When connected in line-at-a-time mode (when wc3270
+    gathers a line of input before forwarding it to the host), entering this
+    character at the keyboard causes the current input line to be redisplayed.
+</p>
+<a name="sbcsCgcsgid"></a>
+<b>Name:</b> wc3270.sbcsCgcsgid<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Overrides the compiled-in value of the CGCSGID for the current host
+    character set.  The value is an integer, which can be prefixed with '0x'
+    to be in hexadecimal.  The upper 16 bits are the GCSGID (character
+    set) and the lower 16 bits are the CPGID (code page).  This value
+    applies only to the single-byte (SBCS) character set.  Use
+    <a href=#dbcsCgcsgid>wc3270.dbcsCgcsgid</a> for the double-byte (DBCS) character set.
+</p>
+<a name="screenTrace"></a>
+<b>Name:</b> wc3270.screenTrace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set screenTrace
+, -clear screenTrace
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will save an ASCII version of the screen image in
+    a file every time it changes.
+    The file name defaults to
+    <b>x3scr.<i>pid</i>.txt</b> in the wc3270 Application Data directory.
+    The directory prefix is defined by <a href=#traceDir>wc3270.traceDir</a>.
+    If <a href=#screenTraceFile>wc3270.screenTraceFile</a> is defined, it defines the
+    file name and <a href=#traceDir>wc3270.traceDir</a> is ignored.
+    file name.
+</p>
+<a name="screenTraceFile"></a>
+<b>Name:</b> wc3270.screenTraceFile<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, gives the name of the file that screen traces will be
+    written into.
+</p>
+<a name="scriptPort"></a>
+<b>Name:</b> wc3270.scriptPort<br>
+<b>Type</b>: Integer<br>
+<b>Command Line</b>: -scriptport
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, wc3270 will accept script connections on the specified local TCP
+    port.
+    The rules for the commands passed over these connections are documented
+    in the <i>x3270-script</i> manual page.
+</p>
+<a name="suppressActions"></a>
+<b>Name:</b> wc3270.suppressActions<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    A list of whitespace-separated action names, with or without parentheses,
+    which are to be ignored.  The actions will be completely inaccessible,
+    whether by keymaps, scripts, macros or the Execute an Action menu option.
+    This resource is intended to be used as a security precaution for users
+    who can define their own keymaps, but who do not have access to resource
+    definitions or command-line options.
+</p>
+<a name="termName"></a>
+<b>Name:</b> wc3270.termName<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -tn
+<br>
+<b>Description</b>:<br>
+<p class=indented>    An alternate name to be sent in response to the host's TELNET DO OPTION
+    TERMINAL-NAME request.  The default is <b>IBM-</b>, followed by the
+    value of <a href=#model>wc3270.model</a>.
+</p>
+<a name="title"></a>
+<b>Name:</b> wc3270.title<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -title
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Sets the title for the wc3270 window, overriding the default of constructing
+    the name from the host that is connected to.
+</p>
+<a name="traceDir"></a>
+<b>Name:</b> wc3270.traceDir<br>
+<b>Type</b>: String<br>
+<b>Default</b>: <i>app-data</i><br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the directory that trace files are written into.
+    The default is the wc3270 Application Data directory.
+</p>
+<a name="traceFile"></a>
+<b>Name:</b> wc3270.traceFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -tracefile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, gives the name of the file that data stream and event traces
+    will be written into.
+    If it begins with ">>", data will be appended to the file.
+</p>
+<a name="traceFileSize"></a>
+<b>Name:</b> wc3270.traceFileSize<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -tracefilesize
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, gives a limit on the size of the file that data stream and
+    event traces will be written into.  If not defined, or defined as <b>0</b>,
+    there
+    will be no limit on the size of the file.  The value is a number, followed
+    by an optional suffix.  If the suffix is <b>K</b> (e.g., 128K),
+    the value will be multiplied by 1024.
+    If the suffix is <b>M</b>, the value will be multiplied
+    by (1024*1024).  The size limit enforced at operation boundaries, not per
+    byte, so the actual file may grow slightly larger.  When the file size
+    exceeds the limit, the trace file will be renamed with a "-" appended and
+    a new file started.
+</p>
+<a name="traceMonitor"></a>
+<b>Name:</b> wc3270.traceMonitor<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will create a window to monitor data stream and
+    event traces.
+    When false, no monitor window will be
+    created.
+</p>
+<a name="typeahead"></a>
+<b>Name:</b> wc3270.typeahead<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will store keystrokes in a buffer when the
+    keyboard is locked.  When false, these keystrokes will be dropped.
+</p>
+<a name="underscore"></a>
+<b>Name:</b> wc3270.underscore<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Command Line</b>: -set underscore
+, -clear underscore
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, wc3270 will display fields with the <i>underlined</i>
+    attribute in a special way: blank characters will be translated to
+    underscore (<b>_</b>) characters.  This is needed
+    to overcome the fact that Windows consoles
+    are unable to display real underlined text.
+</p>
+<a name="unlockDelay"></a>
+<b>Name:</b> wc3270.unlockDelay<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When wc3270 sends the host an AID (the <b>Enter</b>, <b>Clear</b>, <b>PF</b>
+    or <b>PA</b>
+    actions), it locks the keyboard until the host sends a reply to
+    unlock it.  Some hosts unlock the keyboard before they are actually
+    finished processing the command, which can cause scripts to malfunction
+    subtly.  To avoid this, wc3270 implements a hack to briefly delay actually
+    unlocking the keyboard.
+    When <a href=#unlockDelay>wc3270.unlockDelay</a> is true, the keyboard unlock
+    will be delayed for <a href=#unlockDelayMs>wc3270.unlockDelayMs</a> milliseconds.  Setting it to
+    false removes this delay, except when executing a macro.
+</p>
+<a name="unlockDelayMs"></a>
+<b>Name:</b> wc3270.unlockDelayMs<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 350<br>
+<b>Description</b>:<br>
+<p class=indented>    Overrides the default value for the unlock delay (the delay between the
+    host unlocking the keyboard and wc3270 actually performing the unlock).
+    The value is in milliseconds; use 0 to turn off the delay completely,
+    including for macros.
+</p>
+<a name="user"></a>
+<b>Name:</b> wc3270.user<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -user
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the user name sent in response to a TELNET NEW-ENVIRON
+    sub-negotiation request, used by iSeries hosts (RFC 4777).
+</p>
+<a name="visualBell"></a>
+<b>Name:</b> wc3270.visualBell<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#bellMode>wc3270.bellMode</a></i>
+    <p class="indented">
+    When true, wc3270 will just flash the screen in response to an ALARM WCC
+    or BELL character, rather than beeping the Windows console.  When false,
+    wc3270 will beep the console and flash the screen.
+    <p class="indented">
+    Note that this resource is overridden by <a href=#bellMode>wc3270.bellMode</a>.
+    <a href=#bellMode>wc3270.bellMode</a> is the preferred method of controlling the console bell
+    behavior.
+</p>
+<a name="werase"></a>
+<b>Name:</b> wc3270.werase<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^W<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When connected in line-at-a-time mode (when wc3270
+    gathers a line of input before forwarding it to the host), entering
+    this character at the keyboard erases the last word of input.
+    <p class=indented>
+    When connected in character-at-a-time mode (when wc3270 sends each
+    keystroke to the host), this is the ASCII character that is sent to
+    the host by the <b>DeleteWord</b> action.
+</p>
+<h2>Index of All Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#asciiBoxDraw">asciiBoxDraw</a></td> <td><a href="#autoShortcut">autoShortcut</a></td> <td><a href="#bellMode">bellMode</a></td> <td><a href="#bindLimit">bindLimit</a></td> </tr>
+<tr> <td><a href="#blankFill">blankFill</a></td> <td><a href="#bsdTm">bsdTm</a></td> <td><a href="#caDir">caDir</a></td> <td><a href="#caFile">caFile</a></td> </tr>
+<tr> <td><a href="#certFile">certFile</a></td> <td><a href="#certFileType">certFileType</a></td> <td><a href="#chainFile">chainFile</a></td> <td><a href="#charset">charset</a></td> </tr>
+<tr> <td><a href="#color8">color8</a></td> <td><a href="#composeMap">composeMap</a></td> <td><a href="#composeMap.foo">composeMap.<i>foo</i></a></td> <td><a href="#confDir">confDir</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor0">consoleColorForHostColor0</a></td> <td><a href="#consoleColorForHostColorNeutralBlack">consoleColorForHostColorNeutralBlack</a></td> <td><a href="#consoleColorForHostColor1">consoleColorForHostColor1</a></td> <td><a href="#consoleColorForHostColorBlue">consoleColorForHostColorBlue</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor2">consoleColorForHostColor2</a></td> <td><a href="#consoleColorForHostColorRed">consoleColorForHostColorRed</a></td> <td><a href="#consoleColorForHostColor3">consoleColorForHostColor3</a></td> <td><a href="#consoleColorForHostColorPink">consoleColorForHostColorPink</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor4">consoleColorForHostColor4</a></td> <td><a href="#consoleColorForHostColorGreen">consoleColorForHostColorGreen</a></td> <td><a href="#consoleColorForHostColor5">consoleColorForHostColor5</a></td> <td><a href="#consoleColorForHostColorTurquoise">consoleColorForHostColorTurquoise</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor6">consoleColorForHostColor6</a></td> <td><a href="#consoleColorForHostColorYellow">consoleColorForHostColorYellow</a></td> <td><a href="#consoleColorForHostColor7">consoleColorForHostColor7</a></td> <td><a href="#consoleColorForHostColorNeutralWhite">consoleColorForHostColorNeutralWhite</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor8">consoleColorForHostColor8</a></td> <td><a href="#consoleColorForHostColorBlack">consoleColorForHostColorBlack</a></td> <td><a href="#consoleColorForHostColor9">consoleColorForHostColor9</a></td> <td><a href="#consoleColorForHostColorDeepBlue">consoleColorForHostColorDeepBlue</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor10">consoleColorForHostColor10</a></td> <td><a href="#consoleColorForHostColorOrange">consoleColorForHostColorOrange</a></td> <td><a href="#consoleColorForHostColor12">consoleColorForHostColor12</a></td> <td><a href="#consoleColorForHostColorPurple">consoleColorForHostColorPurple</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor13">consoleColorForHostColor13</a></td> <td><a href="#consoleColorForHostColorPaleGreen">consoleColorForHostColorPaleGreen</a></td> <td><a href="#consoleColorForHostColor14">consoleColorForHostColor14</a></td> <td><a href="#consoleColorForHostColorPaleTurquoise">consoleColorForHostColorPaleTurquoise</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor15">consoleColorForHostColor15</a></td> <td><a href="#consoleColorForHostColorGrey">consoleColorForHostColorGrey</a></td> <td><a href="#consoleColorForHostColor16">consoleColorForHostColor16</a></td> <td><a href="#consoleColorForHostColorWhite">consoleColorForHostColorWhite</a></td> </tr>
+<tr> <td><a href="#cursorPos">cursorPos</a></td> <td><a href="#dbcsCgcsgid">dbcsCgcsgid</a></td> <td><a href="#dftBufferSize">dftBufferSize</a></td> <td><a href="#devName">devName</a></td> </tr>
+<tr> <td><a href="#dsTrace">dsTrace</a></td> <td><a href="#eof">eof</a></td> <td><a href="#erase">erase</a></td> <td><a href="#eventTrace">eventTrace</a></td> </tr>
+<tr> <td><a href="#extended">extended</a></td> <td><a href="#hostColorForDefault">hostColorForDefault</a></td> <td><a href="#hostColorForIntensified">hostColorForIntensified</a></td> <td><a href="#hostColorForProtected">hostColorForProtected</a></td> </tr>
+<tr> <td><a href="#hostColorForProtectedIntensified">hostColorForProtectedIntensified</a></td> <td><a href="#hostname">hostname</a></td> <td><a href="#hostsFile">hostsFile</a></td> <td><a href="#icrnl">icrnl</a></td> </tr>
+<tr> <td><a href="#idleCommand">idleCommand</a></td> <td><a href="#idleCommandEnabled">idleCommandEnabled</a></td> <td><a href="#idleTimeout">idleTimeout</a></td> <td><a href="#inlcr">inlcr</a></td> </tr>
+<tr> <td><a href="#intr">intr</a></td> <td><a href="#keyFile">keyFile</a></td> <td><a href="#keyFileType">keyFileType</a></td> <td><a href="#keymap">keymap</a></td> </tr>
+<tr> <td><a href="#keymap.foo">keymap.<i>foo</i></a></td> <td><a href="#keyPasswd">keyPasswd</a></td> <td><a href="#kill">kill</a></td> <td><a href="#lineWrap">lineWrap</a></td> </tr>
+<tr> <td><a href="#loginMacro">loginMacro</a></td> <td><a href="#lnext">lnext</a></td> <td><a href="#localCp">localCp</a></td> <td><a href="#m3279">m3279</a></td> </tr>
+<tr> <td><a href="#marginedPaste">marginedPaste</a></td> <td><a href="#model">model</a></td> <td><a href="#monoCase">monoCase</a></td> <td><a href="#noPrompt">noPrompt</a></td> </tr>
+<tr> <td><a href="#numericLock">numericLock</a></td> <td><a href="#onlcr">onlcr</a></td> <td><a href="#oerrLock">oerrLock</a></td> <td><a href="#once">once</a></td> </tr>
+<tr> <td><a href="#oversize">oversize</a></td> <td><a href="#port">port</a></td> <td><a href="#proxy">proxy</a></td> <td><a href="#printerLu">printerLu</a></td> </tr>
+<tr> <td><a href="#printer.assocCommandLine">printer.assocCommandLine</a></td> <td><a href="#printer.codepage">printer.codepage</a></td> <td><a href="#printer.luCommandLine">printer.luCommandLine</a></td> <td><a href="#printer.name">printer.name</a></td> </tr>
+<tr> <td><a href="#printer.options">printer.options</a></td> <td><a href="#printTextFont">printTextFont</a></td> <td><a href="#printTextSize">printTextSize</a></td> <td><a href="#qrBgColor">qrBgColor</a></td> </tr>
+<tr> <td><a href="#quit">quit</a></td> <td><a href="#reconnect">reconnect</a></td> <td><a href="#rprnt">rprnt</a></td> <td><a href="#sbcsCgcsgid">sbcsCgcsgid</a></td> </tr>
+<tr> <td><a href="#screenTrace">screenTrace</a></td> <td><a href="#screenTraceFile">screenTraceFile</a></td> <td><a href="#scriptPort">scriptPort</a></td> <td><a href="#suppressActions">suppressActions</a></td> </tr>
+<tr> <td><a href="#termName">termName</a></td> <td><a href="#title">title</a></td> <td><a href="#traceDir">traceDir</a></td> <td><a href="#traceFile">traceFile</a></td> </tr>
+<tr> <td><a href="#traceFileSize">traceFileSize</a></td> <td><a href="#traceMonitor">traceMonitor</a></td> <td><a href="#typeahead">typeahead</a></td> <td><a href="#underscore">underscore</a></td> </tr>
+<tr> <td><a href="#unlockDelay">unlockDelay</a></td> <td><a href="#unlockDelayMs">unlockDelayMs</a></td> <td><a href="#user">user</a></td> <td><a href="#visualBell">visualBell</a></td> </tr>
+<tr> <td><a href="#werase">werase</a></td> </tr>
+</table>
+<h2>Basic Configuration Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#charset">charset</a></td> <td><a href="#hostname">hostname</a></td> <td><a href="#keymap">keymap</a></td> <td><a href="#model">model</a></td> </tr>
+<tr> <td><a href="#port">port</a></td> <td><a href="#proxy">proxy</a></td> <td><a href="#printerLu">printerLu</a></td> </tr>
+</table>
+<h2>Appearance Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#consoleColorForHostColor0">consoleColorForHostColor0</a></td> <td><a href="#consoleColorForHostColorNeutralBlack">consoleColorForHostColorNeutralBlack</a></td> <td><a href="#consoleColorForHostColor1">consoleColorForHostColor1</a></td> <td><a href="#consoleColorForHostColorBlue">consoleColorForHostColorBlue</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor2">consoleColorForHostColor2</a></td> <td><a href="#consoleColorForHostColorRed">consoleColorForHostColorRed</a></td> <td><a href="#consoleColorForHostColor3">consoleColorForHostColor3</a></td> <td><a href="#consoleColorForHostColorPink">consoleColorForHostColorPink</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor4">consoleColorForHostColor4</a></td> <td><a href="#consoleColorForHostColorGreen">consoleColorForHostColorGreen</a></td> <td><a href="#consoleColorForHostColor5">consoleColorForHostColor5</a></td> <td><a href="#consoleColorForHostColorTurquoise">consoleColorForHostColorTurquoise</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor6">consoleColorForHostColor6</a></td> <td><a href="#consoleColorForHostColorYellow">consoleColorForHostColorYellow</a></td> <td><a href="#consoleColorForHostColor7">consoleColorForHostColor7</a></td> <td><a href="#consoleColorForHostColorNeutralWhite">consoleColorForHostColorNeutralWhite</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor8">consoleColorForHostColor8</a></td> <td><a href="#consoleColorForHostColorBlack">consoleColorForHostColorBlack</a></td> <td><a href="#consoleColorForHostColor9">consoleColorForHostColor9</a></td> <td><a href="#consoleColorForHostColorDeepBlue">consoleColorForHostColorDeepBlue</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor10">consoleColorForHostColor10</a></td> <td><a href="#consoleColorForHostColorOrange">consoleColorForHostColorOrange</a></td> <td><a href="#consoleColorForHostColor12">consoleColorForHostColor12</a></td> <td><a href="#consoleColorForHostColorPurple">consoleColorForHostColorPurple</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor13">consoleColorForHostColor13</a></td> <td><a href="#consoleColorForHostColorPaleGreen">consoleColorForHostColorPaleGreen</a></td> <td><a href="#consoleColorForHostColor14">consoleColorForHostColor14</a></td> <td><a href="#consoleColorForHostColorPaleTurquoise">consoleColorForHostColorPaleTurquoise</a></td> </tr>
+<tr> <td><a href="#consoleColorForHostColor15">consoleColorForHostColor15</a></td> <td><a href="#consoleColorForHostColorGrey">consoleColorForHostColorGrey</a></td> <td><a href="#consoleColorForHostColor16">consoleColorForHostColor16</a></td> <td><a href="#consoleColorForHostColorWhite">consoleColorForHostColorWhite</a></td> </tr>
+<tr> <td><a href="#cursorPos">cursorPos</a></td> <td><a href="#hostColorForDefault">hostColorForDefault</a></td> <td><a href="#hostColorForIntensified">hostColorForIntensified</a></td> <td><a href="#hostColorForProtected">hostColorForProtected</a></td> </tr>
+<tr> <td><a href="#hostColorForProtectedIntensified">hostColorForProtectedIntensified</a></td> <td><a href="#title">title</a></td> <td><a href="#underscore">underscore</a></td> </tr>
+</table>
+<h2>NVT-Mode Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#eof">eof</a></td> <td><a href="#erase">erase</a></td> <td><a href="#icrnl">icrnl</a></td> <td><a href="#inlcr">inlcr</a></td> </tr>
+<tr> <td><a href="#intr">intr</a></td> <td><a href="#kill">kill</a></td> <td><a href="#lineWrap">lineWrap</a></td> <td><a href="#lnext">lnext</a></td> </tr>
+<tr> <td><a href="#onlcr">onlcr</a></td> <td><a href="#quit">quit</a></td> <td><a href="#rprnt">rprnt</a></td> <td><a href="#werase">werase</a></td> </tr>
+</table>
+<h2>Protocol Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#bindLimit">bindLimit</a></td> <td><a href="#bsdTm">bsdTm</a></td> <td><a href="#color8">color8</a></td> <td><a href="#dbcsCgcsgid">dbcsCgcsgid</a></td> </tr>
+<tr> <td><a href="#dftBufferSize">dftBufferSize</a></td> <td><a href="#devName">devName</a></td> <td><a href="#sbcsCgcsgid">sbcsCgcsgid</a></td> <td><a href="#termName">termName</a></td> </tr>
+<tr> <td><a href="#user">user</a></td> </tr>
+</table>
+<h2>Terminal Interaction Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#bellMode">bellMode</a></td> <td><a href="#blankFill">blankFill</a></td> <td><a href="#idleCommand">idleCommand</a></td> <td><a href="#idleCommandEnabled">idleCommandEnabled</a></td> </tr>
+<tr> <td><a href="#idleTimeout">idleTimeout</a></td> <td><a href="#marginedPaste">marginedPaste</a></td> <td><a href="#numericLock">numericLock</a></td> <td><a href="#oerrLock">oerrLock</a></td> </tr>
+<tr> <td><a href="#visualBell">visualBell</a></td> </tr>
+</table>
+<h2>Security Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#caDir">caDir</a></td> <td><a href="#caFile">caFile</a></td> <td><a href="#certFile">certFile</a></td> <td><a href="#certFileType">certFileType</a></td> </tr>
+<tr> <td><a href="#chainFile">chainFile</a></td> <td><a href="#keyFile">keyFile</a></td> <td><a href="#keyFileType">keyFileType</a></td> <td><a href="#keyPasswd">keyPasswd</a></td> </tr>
+<tr> <td><a href="#noPrompt">noPrompt</a></td> <td><a href="#suppressActions">suppressActions</a></td> </tr>
+</table>
+<h2>Tracing Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#dsTrace">dsTrace</a></td> <td><a href="#eventTrace">eventTrace</a></td> <td><a href="#screenTrace">screenTrace</a></td> <td><a href="#screenTraceFile">screenTraceFile</a></td> </tr>
+<tr> <td><a href="#traceDir">traceDir</a></td> <td><a href="#traceFile">traceFile</a></td> <td><a href="#traceFileSize">traceFileSize</a></td> <td><a href="#traceMonitor">traceMonitor</a></td> </tr>
+</table>
+<h2>Other Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#asciiBoxDraw">asciiBoxDraw</a></td> <td><a href="#autoShortcut">autoShortcut</a></td> <td><a href="#composeMap">composeMap</a></td> <td><a href="#composeMap.foo">composeMap.<i>foo</i></a></td> </tr>
+<tr> <td><a href="#confDir">confDir</a></td> <td><a href="#hostsFile">hostsFile</a></td> <td><a href="#keymap.foo">keymap.<i>foo</i></a></td> <td><a href="#loginMacro">loginMacro</a></td> </tr>
+<tr> <td><a href="#localCp">localCp</a></td> <td><a href="#monoCase">monoCase</a></td> <td><a href="#once">once</a></td> <td><a href="#oversize">oversize</a></td> </tr>
+<tr> <td><a href="#printer.assocCommandLine">printer.assocCommandLine</a></td> <td><a href="#printer.codepage">printer.codepage</a></td> <td><a href="#printer.luCommandLine">printer.luCommandLine</a></td> <td><a href="#printer.name">printer.name</a></td> </tr>
+<tr> <td><a href="#printer.options">printer.options</a></td> <td><a href="#printTextFont">printTextFont</a></td> <td><a href="#printTextSize">printTextSize</a></td> <td><a href="#qrBgColor">qrBgColor</a></td> </tr>
+<tr> <td><a href="#reconnect">reconnect</a></td> <td><a href="#scriptPort">scriptPort</a></td> <td><a href="#typeahead">typeahead</a></td> <td><a href="#unlockDelay">unlockDelay</a></td> </tr>
+<tr> <td><a href="#unlockDelayMs">unlockDelayMs</a></td> </tr>
+</table>
+<h2>Deprecated Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#extended">extended</a></td> <td><a href="#m3279">m3279</a></td> </tr>
+</table>
+<p><i>wc3270 version 3.3.12ga7 Wed Aug 24 09:33:55 CDT 2011
+
+</body>

@@ -1,0 +1,170 @@
+<html>
+<head>
+<title>x3270if Manual Page</title>
+<link HREF="http://www.w3.org/StyleSheets/Core/Steely" TYPE="text/css" REL="stylesheet">
+</head>
+<body>
+<h1>x3270if Manual Page</h1>
+<h2>Contents</h2>
+<blockquote>
+<a HREF="#Name">Name</a><br>
+<a HREF="#Synopsis">Synopsis</a><br>
+<a HREF="#Description">Description</a><br>
+<a HREF="#Options">Options</a><br>
+<a HREF="#Exit-Status">Exit Status</a><br>
+<a HREF="#Environment">Environment</a><br>
+<a HREF="#See-Also">See Also</a><br>
+<a HREF="#Copyright">Copyright</a><br>
+</blockquote>
+<a NAME="Name"></a><h2>Name</h2>
+x3270if - command interface to x3270, c3270 and s3270
+<a NAME="Synopsis"></a><h2>Synopsis</h2>
+<b>x3270if</b> [option]... [ <i>action</i> ]
+<br>
+<b>x3270if -i</b>
+<a NAME="Description"></a><h2>Description</h2>
+<b>x3270if</b> provides an interface between scripts and
+the 3270 emulators <i>x3270</i>, <i>c3270</i>, and <i>s3270</i>.
+<p>
+<b>x3270if</b> operates in one of two modes.
+In <b>action mode</b>, it passes a single action and parameters to the
+emulator for execution.
+The result of the action is written to standard output, along with the
+(optional) status of the emulator.
+(The action is optional as well, so that <b>x3270if</b> can just reports the
+emulator status.)
+In <b>iterative mode</b>, it forms a continuous conduit between a script and
+the emulator.
+<p>
+The <i>action</i> takes the form:
+<p>
+<i>action-name</i>(<i>param</i>[,<i>param</i>]...)
+<p>
+The parentheses are manatory, and usually must be quoted when <b>x3270if</b> is
+called from a shell script.
+<p>
+If any <i>param</i> contains a space or comma, it must be surrounded by
+double quotes.
+<a NAME="Options"></a><h2>Options</h2>
+<dl><dt><b>-s</b> <i>field</i></dt><dd>
+Causes <b>x3270if</b> to write to stdout the value of one of the
+emulator status fields.
+<i>Field</i> is an integer in the range 0 through 11.
+The value 0 is a no-op and is used only to return exit status indicating the
+state of the emulator.
+The indices 1-11 and meanings of each field are documented on the
+<a HREF="x3270-script.html"><i>x3270-script</i>(1)</a> manual page.
+If an <i>action</i> is specified as well, the status field is written after the
+output of the action, separated by a newline.
+The <b>-s</b> option is mutually exclusive with the
+<b>-S</b> and <b>-i</b> options.
+<dt><b>-S</b></dt><dd>
+Causes <b>x3270if</b> to write to stdout the value of all of the
+emulator status fields.
+If an <i>action</i> is specified as well, the status fields are written after the
+output of the action, separated by a newline.
+The <b>-S</b> option is mutually exclusive with the
+<b>-s</b> and <b>-i</b> options.
+<dt><b>-i</b></dt><dd>
+Puts <b>x3270if</b> in iterative mode.
+Data from <b>x3270if</b>'s standard input is copied to the
+emulator's script input; data from the
+emulator's script output is copied to
+<b>x3270if</b>'s standard output.
+The <b>-i</b> option is mutually exclusive with the
+<b>-s</b> and <b>-S</b> options.
+<b>x3270if</b>
+runs until it detects end-of-file on its standard input or on the
+output from the emulator.
+(This mode exists primarily to give <i>expect</i>(1)
+a process to run, on systems which do not support bidirectional pipes.)
+<dt><b>-p</b> <i>process-id</i></dt><dd>
+Causes <i>x3270if</i> to use a Unix-domain socket to connect to the emulator,
+rather than pipe file descriptors given in environment variables.
+The emulator must have been started with the <b>-socket</b> option.
+<dt><b>-t</b> <i>port</i></dt><dd>
+Causes <i>x3270if</i> to use a TCP socket to connect to the emulator,
+rather than pipe file descriptors given in environment variables.
+The emulator must have been started with the <b>-scriptport</b>
+option.
+<dt><b>-v</b></dt><dd>
+Turns on verbose debug messages, showing on stderr the literal data that is
+passed between the emulator and <b>x3270if</b>.
+</dl>
+<a NAME="Exit-Status"></a><h2>Exit Status</h2>
+In action mode, if the requested <i>action</i> succeeds,
+<b>x3270if</b> exits with status 0.
+If the action fails, <b>x3270if</b> exits with status 1.
+In iterative mode, <b>x3270if</b>
+exits with status 0 when it encounters end-of-file.
+If there is an operational error within <b>x3270if</b>
+itself, such as a command-line syntax error, missing environment
+variable, or an unexpectedly closed pipe,
+<b>x3270if</b> exits with status 2.
+<a NAME="Environment"></a><h2>Environment</h2>
+When a script is run as a child process of one of the emulators via the
+<b>Script</b> action, the emulator passes information about how to control it
+in environment variables.
+<p>
+On Unix, the emulator process creates a pair of pipes for communication with
+the child script process.
+The values of the file descriptors for these pipes are encoded as text
+in two environment variables:
+<dl><dt><b>X3270OUTPUT</b></dt><dd>
+Output from the emulator, input to the child process.
+<dt><b>X3270INPUT</b></dt><dd>
+Input to the emulator, output from the child process.
+<p>
+On Windows, or when a Unix emulator is started with the
+<b>-scriptport</b> option, the emulator will pass the port number
+encoded as text in the <b>X3270PORT</b> environment variable.
+<i>x3270if</i> will use that value as if it had been passed to it via the
+<b>-t</b> option.
+<b>X3270PORT</b> takes precedence over <b>X3270OUTPUT</b> and
+<b>X3270INPUT</b>.
+</dl>
+<a NAME="See-Also"></a><h2>See Also</h2>
+<a HREF="x3270-man.html">x3270(1)</a>,
+<a HREF="c3270-man.html">c3270(1)</a>,
+<a HREF="s3270-man.html">s3270(1)</a>,
+<a HREF="x3270-script.html">x3270-script(1)</a>
+<a NAME="Copyright"></a><h2>Copyright</h2>
+Copyright &copy; 1999-2009, Paul Mattes.
+<br>
+All rights reserved.
+<p>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+<dl>
+<dt>*</dt><dd>
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+<dt>*</dt><dd>
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+<dt>*</dt><dd>
+Neither the names of Paul Mattes nor the names of his contributors
+may be used to endorse or promote products derived from this software
+without specific prior written permission.
+</dl>
+
+<p>
+THIS SOFTWARE IS PROVIDED BY PAUL MATTES `AS IS' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL PAUL MATTES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<hr>
+<i>
+This HTML document and the accompanying troff document were generated with
+a set of write-only <b>m4</b> macros and the powerful <b>vi</b> editor.
+<br>Last modified 24 August 2011.
+</i>
+</body>
+</html>
